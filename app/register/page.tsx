@@ -4,7 +4,8 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { createUserWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../lib/firebase";
+import { auth, db } from "@/app/lib/firebase";
+import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 
 export default function RegisterPage() {
   const [shopName, setShopName] = useState("");
@@ -24,25 +25,34 @@ export default function RegisterPage() {
     }
 
     try {
+      // 1️⃣ Create auth user
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
         password
       );
 
-      console.log("Registered User:", userCredential.user);
+      const user = userCredential.user;
 
-      setSuccess("Account created successfully!");
+      // 2️⃣ 7-day trial
+      const trialEndsAt = new Date();
+      trialEndsAt.setDate(trialEndsAt.getDate() + 7);
+
+      // 3️⃣ Save user in Firestore
+      await setDoc(doc(db, "users", user.uid), {
+        email,
+        shopName,
+        trialEndsAt,
+        subscriptionEndsAt: null,
+        createdAt: serverTimestamp(),
+      });
+
+      setSuccess("Account created! 7-day trial started 🎉");
       setShopName("");
       setEmail("");
       setPassword("");
     } catch (err: any) {
-      // Clean up Firebase error messages
-      let message = err.message
-        .replace("Firebase:", "")
-        .replace(/\(auth\/.*\)\.?/i, "")
-        .trim();
-      setError(message);
+      setError(err.message);
     }
   };
 
@@ -54,78 +64,46 @@ export default function RegisterPage() {
         transition={{ duration: 0.6 }}
         className="w-full max-w-md bg-white p-8 rounded-xl shadow-lg"
       >
-        <h1 className="text-2xl font-bold text-gray-900 mb-6 text-center">
+        <h1 className="text-2xl font-bold text-center mb-6">
           Create Your Account
         </h1>
 
-        {error && <p className="text-red-500 mb-2 text-center">{error}</p>}
-        {success && <p className="text-green-500 mb-2 text-center">{success}</p>}
+        {error && <p className="text-red-500 text-center">{error}</p>}
+        {success && <p className="text-green-600 text-center">{success}</p>}
 
-        <form onSubmit={handleRegister} className="flex flex-col gap-4">
-          {/* Shop Name */}
-          <div className="flex flex-col">
-            <label htmlFor="shopName" className="text-gray-700 mb-1">
-              Shop Name
-            </label>
-            <input
-              type="text"
-              id="shopName"
-              value={shopName}
-              onChange={(e) => setShopName(e.target.value)}
-              placeholder="Your Shop Name"
-              className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
-              required
-            />
-          </div>
+        <form onSubmit={handleRegister} className="space-y-4 mt-4">
+          <input
+            type="text"
+            placeholder="Shop Name"
+            value={shopName}
+            onChange={(e) => setShopName(e.target.value)}
+            className="w-full border px-4 py-2 rounded-lg"
+          />
 
-          {/* Email */}
-          <div className="flex flex-col">
-            <label htmlFor="email" className="text-gray-700 mb-1">
-              Email
-            </label>
-            <input
-              type="email"
-              id="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@example.com"
-              className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
-              required
-            />
-          </div>
+          <input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full border px-4 py-2 rounded-lg"
+          />
 
-          {/* Password */}
-          <div className="flex flex-col">
-            <label htmlFor="password" className="text-gray-700 mb-1">
-              Password
-            </label>
-            <input
-              type="password"
-              id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="********"
-              className="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-purple-500"
-              required
-            />
-          </div>
+          <input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full border px-4 py-2 rounded-lg"
+          />
 
-          {/* Create Account Button */}
           <motion.button
             whileHover={{ scale: 1.05 }}
             type="submit"
-            className="bg-purple-500 text-white font-semibold py-2 rounded-lg mt-2 shadow-md hover:bg-purple-600 transition-all"
+            className="w-full bg-purple-600 text-white py-2 rounded-lg"
           >
             Create Account
           </motion.button>
         </form>
-
-        <p className="text-gray-500 text-sm mt-4 text-center">
-          Already have an account?{" "}
-          <a href="/login" className="text-purple-500 font-semibold">
-            Login
-          </a>
-        </p>
       </motion.div>
     </main>
   );
