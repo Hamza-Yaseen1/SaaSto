@@ -112,24 +112,27 @@ export function PDFDesign({ invoiceNo, customerName, items }: PDFDesignProps) {
         });
 
         // ================= GRAND TOTAL =================
-        y += 25;
-        doc.setFont("helvetica", "bold");
-        doc.setFontSize(16);
-        doc.setTextColor(tealColor[0], tealColor[1], tealColor[2]);
+       // ================= GRAND TOTAL =================
+y += 40;
 
-        const totalHeadingX = 400;
-        const totalValueX = pageWidth - 50;
+doc.setFont("helvetica", "bold");
+doc.setFontSize(14);
+doc.setTextColor(tealColor[0], tealColor[1], tealColor[2]);
 
-        // Adjust vertical alignment
-        doc.text("TOTAL AMOUNT:", totalHeadingX, y);
-        doc.setTextColor(0, 0, 0);
-        doc.text(`${grandTotal.toFixed(0)}`, totalValueX, y, { align: "right" });
+// Label (left side)
+doc.text("TOTAL AMOUNT:", 350, y);
+
+// Value (right aligned)
+doc.setTextColor(0, 0, 0);
+doc.text(
+  grandTotal.toLocaleString("en-PK"), // 👈 formatted
+  pageWidth - 50,
+  y,
+  { align: "right" }
+);
 
         // ================= BOTTOM WAVES =================
-        doc.setFillColor(darkGrey[0], darkGrey[1], darkGrey[2]);
-        doc.ellipse(pageWidth, pageHeight, 250, 100, "F");
-        doc.setFillColor(tealColor[0], tealColor[1], tealColor[2]);
-        doc.ellipse(pageWidth, pageHeight, 200, 80, "F");
+       
 
         return doc;
     };
