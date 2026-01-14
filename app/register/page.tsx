@@ -1,4 +1,3 @@
-// /app/register/page.tsx
 "use client";
 
 import { useState } from "react";
@@ -8,7 +7,7 @@ import { auth, db } from "@/app/lib/firebase";
 import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 
 export default function RegisterPage() {
-  const [shopName, setShopName] = useState("");
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -19,13 +18,13 @@ export default function RegisterPage() {
     setError("");
     setSuccess("");
 
-    if (!shopName || !email || !password) {
+    if (!name || !email || !password) {
       setError("Please fill all fields");
       return;
     }
 
     try {
-      // 1️⃣ Create auth user
+      // 1️⃣ Create user in Firebase Auth
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
@@ -34,25 +33,21 @@ export default function RegisterPage() {
 
       const user = userCredential.user;
 
-      // 2️⃣ 7-day trial
-      const trialEndsAt = new Date();
-      trialEndsAt.setDate(trialEndsAt.getDate() + 7);
-
-      // 3️⃣ Save user in Firestore
+      // 2️⃣ Create SIMPLE user document in Firestore
       await setDoc(doc(db, "users", user.uid), {
+        name,
         email,
-        shopName,
-        trialEndsAt,
-        subscriptionEndsAt: null,
         createdAt: serverTimestamp(),
       });
 
-      setSuccess("Account created! 7-day trial started 🎉");
-      setShopName("");
+      setSuccess("Account created successfully 🎉");
+
+      // Reset form
+      setName("");
       setEmail("");
       setPassword("");
     } catch (err: any) {
-      setError(err.message);
+      setError(err.message || "Something went wrong");
     }
   };
 
@@ -74,9 +69,9 @@ export default function RegisterPage() {
         <form onSubmit={handleRegister} className="space-y-4 mt-4">
           <input
             type="text"
-            placeholder="Shop Name"
-            value={shopName}
-            onChange={(e) => setShopName(e.target.value)}
+            placeholder="Your Name"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
             className="w-full border px-4 py-2 rounded-lg"
           />
 

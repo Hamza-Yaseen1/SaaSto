@@ -1,0 +1,223 @@
+---
+File Path: app/layout.tsx
+File Type: Layout
+Language/Format: TypeScript
+Purpose: Root layout defining global structure, fonts, and providing Navbar/Footer
+Dependencies: Next.js (Font, Metadata), React, Navbar, Footer
+Notes: Imports global CSS
+
+---
+File Path: app/page.tsx
+File Type: Page
+Language/Format: TypeScript
+Purpose: Main Landing Page showing all landing page sections
+Dependencies: React, Components (Hero, Features, HowItWorks, Stats, Testimonials, CTA)
+Notes: Renders components sequentially
+
+---
+File Path: app/globals.css
+File Type: Style
+Language/Format: CSS
+Purpose: Global styles and Tailwind directives
+Dependencies: TailwindCSS
+Notes: Defines theme variables and dark mode support
+
+---
+File Path: app/lib/firebase.ts
+File Type: Library
+Language/Format: TypeScript
+Purpose: Firebase initialization and export of Auth/Firestore instances
+Dependencies: firebase/app, firebase/auth, firebase/firestore
+Notes: Uses environment variables for config
+
+---
+File Path: app/Components/Navbar.tsx
+File Type: Component
+Language/Format: TypeScript
+Purpose: Responsive navigation bar with Authentication state handling
+Dependencies: React, Next.js (Link), Lucide-React, Firebase Auth
+Notes: Handles mobile menu and user dropdown
+
+---
+File Path: app/Components/Hero.tsx
+File Type: Component
+Language/Format: TypeScript
+Purpose: Hero section with animated illustration and main CTA
+Dependencies: React, Lucide-React, Framer Motion
+Notes: Uses background gradients
+
+---
+File Path: app/Components/Footer.tsx
+File Type: Component
+Language/Format: TypeScript
+Purpose: Site footer with links and newsletter subscription mock
+Dependencies: Lucide-React, Next.js (Link)
+Notes: Static layout
+
+---
+File Path: app/Components/CTA.tsx
+File Type: Component
+Language/Format: TypeScript
+Purpose: Call to Action section inviting users to register
+Dependencies: None (Basic HTML/CSS)
+Notes: Links to /register
+
+---
+File Path: app/Components/Features.tsx
+File Type: Component
+Language/Format: TypeScript
+Purpose: Display key features in a grid
+Dependencies: Lucide-React, Framer Motion
+Notes: Hover effects on cards
+
+---
+File Path: app/Components/HowItWorks.tsx
+File Type: Component
+Language/Format: TypeScript
+Purpose: Step-by-step guide on using the app
+Dependencies: Framer Motion
+Notes: 3-step visualization
+
+---
+File Path: app/Components/Stats.tsx
+File Type: Component
+Language/Format: TypeScript
+Purpose: Social proof statistics display
+Dependencies: Lucide-React, Framer Motion
+Notes: Shows user/download counts
+
+---
+File Path: app/Components/Testimonials.tsx
+File Type: Component
+Language/Format: TypeScript
+Purpose: User testimonials carousel/grid
+Dependencies: Framer Motion, Lucide-React
+Notes: Displays user feedback
+
+---
+File Path: app/Components/progress.txt
+File Type: Documentation
+Language/Format: Text
+Purpose: Development progress tracking notes
+Dependencies: None
+Notes: Internal dev notes
+
+---
+File Path: app/about/page.tsx
+File Type: Page
+Language/Format: TypeScript
+Purpose: About Us page telling the company story and values
+Dependencies: Framer Motion, Lucide-React
+Notes: Static informational content
+
+---
+File Path: app/contact/page.tsx
+File Type: Page
+Language/Format: TypeScript
+Purpose: Contact page with contact info and message form
+Dependencies: Framer Motion, Lucide-React
+Notes: Form UI only (no backend logic visible)
+
+---
+File Path: app/services/page.tsx
+File Type: Page
+Language/Format: TypeScript
+Purpose: Detailed list of services offered
+Dependencies: Framer Motion, Lucide-React
+Notes: Grid layout of services
+
+---
+File Path: app/login/page.tsx
+File Type: Page
+Language/Format: TypeScript
+Purpose: User login page with Firebase Authentication
+Dependencies: React, Framer Motion, Firebase Auth, Next.js (Router)
+Notes: Handles errors and redirects to dashboard
+
+---
+File Path: app/register/page.tsx
+File Type: Page
+Language/Format: TypeScript
+Purpose: User registration with 7-day trial creation in Firestore
+Dependencies: React, Framer Motion, Firebase Auth, Firebase Firestore
+Notes: Creates user document in 'users' collection
+
+---
+File Path: app/dashboard/page.tsx
+File Type: Page
+Language/Format: TypeScript
+Purpose: User dashboard showing account stats and subscription status
+Dependencies: React, Lucide-React, Framer Motion, Next.js (Link), Firebase Auth/Firestore
+Notes: Checks trial/subscription expiry
+
+---
+File Path: app/invoice/list/page.tsx
+File Type: Page
+Language/Format: TypeScript
+Purpose: List of created invoices for the logged-in user
+Dependencies: React, Firebase Auth/Firestore, Framer Motion
+Notes: Fetches from 'users/{uid}/invoices'
+
+---
+File Path: app/invoice/new/page.tsx
+File Type: Page
+Language/Format: TypeScript
+Purpose: Invoice creation tool with PDF generation and WhatsApp share
+Dependencies: React, jsPDF, Lucide-React, Firebase Auth/Firestore, Framer Motion
+Notes: Complex form with dynamic item list
+
+---
+File Path: package.json
+File Type: Config
+Language/Format: JSON
+Purpose: Project metadata, scripts, and dependencies
+Dependencies: firebase, framer-motion, jspdf, lucide-react, next, react, react-dom
+Notes: Defines 'dev', 'build', 'lint' scripts
+
+---
+File Path: next.config.ts
+File Type: Config
+Language/Format: TypeScript
+Purpose: Next.js framework configuration
+Dependencies: Next.js
+Notes: Currently default/minimal
+
+---
+File Path: tsconfig.json
+File Type: Config
+Language/Format: JSON
+Purpose: TypeScript compiler options
+Dependencies: None
+Notes: Configured for Next.js
+
+---
+File Path: postcss.config.mjs
+File Type: Config
+Language/Format: JavaScript
+Purpose: PostCSS configuration for Tailwind
+Dependencies: @tailwindcss/postcss
+Notes:
+
+---
+File Path: eslint.config.mjs
+File Type: Config
+Language/Format: JavaScript
+Purpose: ESLint configuration
+Dependencies: eslint, eslint-config-next
+Notes: Flat config format
+
+---
+File Path: next-env.d.ts
+File Type: Config
+Language/Format: TypeScript
+Purpose: Next.js type declarations
+Dependencies: None
+Notes: Auto-generated
+
+---
+File Path: README.md
+File Type: Documentation
+Language/Format: Markdown
+Purpose: Project documentation and setup instructions
+Dependencies: None
+Notes: Standard Create Next App readme
